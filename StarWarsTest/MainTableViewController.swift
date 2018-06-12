@@ -31,7 +31,16 @@ class MainTableViewController: UITableViewController {
       
       let character = StarWarsCharacterController.shared.characters[indexPath.row]
       
-      cell.textLabel?.text = character.firstName
+      let imageView = cell.viewWithTag(100) as! UIImageView
+      
+      if let imageData = character.pictureImage {
+         imageView.layer.cornerRadius = imageView.frame.height/2
+         imageView.layer.masksToBounds = true
+         imageView.image = UIImage(data: imageData)
+      }
+      
+      let nameLabel = cell.viewWithTag(101) as! UILabel
+      nameLabel.text = character.fullName
       
       return cell
    }
@@ -39,12 +48,13 @@ class MainTableViewController: UITableViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
       if segue.identifier == "ToDetailVC" {
-         guard let indexPath = tableView.indexPathForSelectedRow else {
+         guard let indexPath = tableView.indexPathForSelectedRow,
+            let detailVC = segue.destination as? DetailViewController else {
             return
          }
          
          let selectedCharacter = StarWarsCharacterController.shared.characters[indexPath.row]
-         
+         detailVC.character = selectedCharacter
       }
     }
    

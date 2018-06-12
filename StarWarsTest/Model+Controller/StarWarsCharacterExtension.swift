@@ -29,4 +29,25 @@ extension StarWarsCharacter {
       self.isForceSensitive = isForceSensitive
       self.affiliation = affiliation
    }
+   
+   var fullName: String {
+      guard let firstName = firstName, let lastName = lastName else {
+         return ""
+      }
+      
+      if lastName == "" {
+         return firstName
+      } else {
+         return firstName + " " + lastName
+      }
+   }
+   
+   var age: Int? {
+      guard let birthDate = birthDate else { return nil }
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateFormat = "YYYY-MM-dd"
+      guard let birthDay = dateFormatter.date(from: birthDate) else { return nil }
+      
+      return Calendar.current.dateComponents([Calendar.Component.year], from: birthDay, to: Date()).year!
+   }
 }
